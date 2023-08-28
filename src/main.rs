@@ -1,9 +1,9 @@
 use std::net::SocketAddr;
 
 use axum::extract::{Path, Query};
-use axum::response::{Html, IntoResponse};
+use axum::response::{Html, IntoResponse, Response};
 use axum::routing::{get, get_service};
-use axum::Router;
+use axum::{Router, middleware};
 
 use serde::Deserialize;
 use tower_http::services::ServeDir;
@@ -17,6 +17,7 @@ async fn main() {
     let routes_all = Router::new()
         .merge(routes_hello())
         .merge(web::route_login::routes())
+        .layer(middleware::map_response(main_response_mapper))
         .fallback_service(routes_static());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
@@ -27,6 +28,14 @@ async fn main() {
         .await
         .unwrap();
 }
+
+async fn main_response_mapper(res: Response) -> Response {
+    println!("-> {:<12} -  main_response_mapper - {res:?}", "HANDLER");
+
+    println!();
+    res
+}
+
 
 #[derive(Debug, Deserialize)]
 struct HelloParams {
