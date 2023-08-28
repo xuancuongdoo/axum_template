@@ -12,6 +12,7 @@ pub use self::error::{Error, Result};
 
 mod error;
 mod web;
+mod models;
 
 #[tokio::main]
 async fn main() {
