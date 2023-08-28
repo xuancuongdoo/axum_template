@@ -8,6 +8,7 @@ use axum::{Router, middleware};
 use serde::Deserialize;
 use tower_cookies::CookieManagerLayer;
 use tower_http::services::ServeDir;
+use web::{mw_auth::mw_require_auth, route_login, route_ticket};
 use crate::models::ModelController;
 
 pub use self::error::{Error, Result};
@@ -15,15 +16,20 @@ pub use self::error::{Error, Result};
 mod error;
 mod web;
 mod models;
+mod ctx;
+
 
 #[tokio::main]
 async fn main()  -> Result<()>{
     let mc = ModelController::new().await?;
+    
+    let routes_apis = route_ticket::routes(mc.clone())
+        .route_layer(middleware::from_fn(web::mw_auth::mw_require_auth));
 
-    let routes_all = Router::new()
+   let routes_all = Router::new()
         .merge(routes_hello())
-        .merge(web::route_login::routes())
-        .nest("/api", web::route_ticket::routes(mc.clone()))
+        .merge(route_login::routes())
+        .nest("/api",routes_apis)
         .layer(middleware::map_response(main_response_mapper))
         .layer(CookieManagerLayer::new())
         .fallback_service(routes_static());
