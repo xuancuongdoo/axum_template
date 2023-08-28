@@ -28,5 +28,6 @@ async fn quick_dev2() -> Result<()> {
     );
     req_login.await?.print().await?;
 
+
     Ok(())
 }
