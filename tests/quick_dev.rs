@@ -6,6 +6,13 @@ async fn quick_dev() -> Result<()> {
     let hc = httpc_test::new_client("http://localhost:3000")?;
 
     hc.do_get("/hello?name=c").await?.print().await?;
+    Ok(())
+}
+
+#[tokio::test]
+async fn quick_dev2() -> Result<()> {
+    let hc = httpc_test::new_client("http://localhost:3000")?;
+    hc.do_get("/hello?name=c").await?.print().await?;
 
     hc.do_get("/src/main.rs").await?.print().await?;
 
@@ -22,10 +29,13 @@ async fn quick_dev() -> Result<()> {
     let req_create_ticket = hc.do_post(
         "/api/tickets",
         json!({
-        "title" : "ticket AAA"
+            "title" : "test"
         }),
     );
     req_create_ticket.await?.print().await?;
-
+    
+    hc.do_delete("/api/tickets/5").await?.print().await?;
+    hc.do_get("/api/tickets/1").await?.print().await?;
+    hc.do_get("/api/tickets").await?.print().await?;
     Ok(())
 }

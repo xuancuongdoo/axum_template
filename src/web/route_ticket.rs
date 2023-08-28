@@ -5,18 +5,11 @@ use axum::extract::{FromRef, State};
 use axum::routing::{delete, get, post};
 use axum::{Json, Router};
 
-#[derive(Clone, FromRef)]
-struct Appstate {
-    mc: ModelController,
-}
-
-
 pub fn routes(mc: ModelController) -> Router {
-    let app_state = Appstate { mc };
     Router::new()
         .route("/tickets", post(create_ticket).get(list_tickets))
-        .route("/tickets/:id", delete(delete_ticket))
-        .with_state(app_state)
+        .route("/tickets/:id", delete(delete_ticket).get(get_ticket))
+        .with_state(mc)
 }
 
 async fn create_ticket(
@@ -32,6 +25,13 @@ async fn list_tickets(State(mc): State<ModelController>) -> Result<Json<Vec<Tick
     println!("--> {:<12} - list_tickets", "HANDLER");
     let tickets = mc.list_tickets().await?;
     Ok(Json(tickets))
+}
+
+
+async fn get_ticket(State(mc) : State<ModelController>, Path(id): Path<u64>) -> Result<Json<Ticket>> {
+    println!("--> {:<12} - get_ticket", "HANDLER");
+    let ticket = mc.get_ticket(id).await?;
+    Ok(Json(ticket))
 }
 
 async fn delete_ticket(
