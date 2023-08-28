@@ -16,9 +16,11 @@ mod web;
 async fn main() {
     let routes_all = Router::new()
         .merge(routes_hello())
+        .merge(web::route_login::routes())
         .fallback_service(routes_static());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+
     println!("--> LISTENING ON {:?}", addr);
     axum::Server::bind(&addr)
         .serve(routes_all.into_make_service())
