@@ -32,14 +32,3 @@ async fn quick_dev() -> Result<()> {
     Ok(())
 }
 
-fn parse_token(token : String) -> Result<(u64, String, String)> {
-    let (_whole, user_id, exp, sign) = regex_captures!{(
-        r#"^user-(\d+)\.(.+)\.(.+)$"#,
-        &token
-    )}.ok_or(Error::AuthFaultNoAuthTokenCookie)?;
-
-    let user_id : u64 = user_id.parse()?;
-    Ok((user_id, exp, sign))
-
-    todo!()
-}
