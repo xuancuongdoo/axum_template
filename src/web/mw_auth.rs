@@ -10,10 +10,8 @@ pub async fn mw_require_auth<B>(
     req: Request<B>,
     next: Next<B>,
 ) -> Result<Response> {
-println!("->> {:<12} - mw_require_auth - {ctx:?}", "MIDDLEWARE");
-
-	ctx?;
-
+    println!("->> {:<12} - mw_require_auth - {ctx:?}", "MIDDLEWARE");
+    ctx?;
 	Ok(next.run(req).await)
 }
 
@@ -30,6 +28,12 @@ impl<S: Send + Sync> FromRequestParts<S> for Ctx {
             .ok_or(Error::AuthFaultNoAuthTokenCookie)
             .and_then(parse_token)?;
        Ok(Ctx::new(user_id)) 
+    }
+}
+
+impl From<S> for Request<Ctx> {
+    fn from(req: Request<Ctx>) -> Self {
+        req
     }
 }
 

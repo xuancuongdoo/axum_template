@@ -24,7 +24,7 @@ async fn main()  -> Result<()>{
     let mc = ModelController::new().await?;
     
     let routes_apis = route_ticket::routes(mc.clone())
-        .route_layer(middleware::from_fn(web::mw_auth::mw_require_auth));
+        .route_layer(middleware::from_fn(mw_require_auth));
 
    let routes_all = Router::new()
         .merge(routes_hello())
@@ -47,8 +47,6 @@ async fn main()  -> Result<()>{
 
 async fn main_response_mapper(res: Response) -> Response {
     println!("-> {:<12} -  main_response_mapper - {res:?}", "HANDLER");
-
-    println!();
     res
 }
 
