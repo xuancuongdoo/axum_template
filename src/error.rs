@@ -3,7 +3,6 @@ use axum::response::{IntoResponse, Response};
 //
 //e
 pub type Result<T> = core::result::Result<T, Error>;
-pub
 #[derive(Debug)]
 pub enum Error {
     LoginFail,
