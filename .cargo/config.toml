@@ -1,0 +1,2 @@
+[env]
+RUST_LOG="rust_web_app=debug,axum=debug,tower_http=debug"

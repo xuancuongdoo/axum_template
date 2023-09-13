@@ -15,11 +15,20 @@ serde_with = "3"
 axum = "0.6.16"
 tower-http = { version = "0.4", features = ["fs"] }
 tower-cookies = "0.9"
+
+# --Tracing
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+
+
+
 # Others
 lazy-regex = "3.0.2"
 async-trait = "0.1"
 strum_macros = "0.25.2"
 uuid = {version = "1", features = ["v4","fast-rng",]}
+
+
 [dev-dependencies]
 anyhow = "1.0.75"
 httpc-test = "0.1.5"

@@ -10,13 +10,14 @@ use axum::middleware::Next;
 use axum::response::Response;
 use lazy_regex::regex_captures;
 use tower_cookies::{Cookie, Cookies};
+use tracing::info;
 
 pub async fn mw_require_auth<B>(
     ctx: Result<Ctx>,
     req: Request<B>,
     next: Next<B>,
 ) -> Result<Response> {
-    println!("->> {:<12} - mw_require_auth - {ctx:?}", "MIDDLEWARE");
+    info!("->> {:<12} - mw_require_auth - {ctx:?}", "MIDDLEWARE");
 
     ctx?;
 
@@ -29,7 +30,7 @@ pub async fn mw_ctx_resolver<B>(
     mut req: Request<B>,
     next: Next<B>,
 ) -> Result<Response> {
-    println!("->> {:<12} - mw_ctx_resolver", "MIDDLEWARE");
+    info!("->> {:<12} - mw_ctx_resolver", "MIDDLEWARE");
 
     let auth_token = cookies.get(AUTH_TOKEN).map(|c| c.value().to_string());
 
@@ -38,10 +39,7 @@ pub async fn mw_ctx_resolver<B>(
         .ok_or(Error::AuthFailNoAuthTokenCookie)
         .and_then(parse_token)
     {
-        Ok((user_id, _exp, _sign)) => {
-            // TODO: Token components validations.
-            Ok(Ctx::new(user_id))
-        }
+        Ok((user_id, _exp, _sign)) => Ok(Ctx::new(user_id)),
         Err(e) => Err(e),
     };
 
@@ -56,13 +54,12 @@ pub async fn mw_ctx_resolver<B>(
     Ok(next.run(req).await)
 }
 
-// region:    --- Ctx Extractor
 #[async_trait]
 impl<S: Send + Sync> FromRequestParts<S> for Ctx {
     type Rejection = Error;
 
     async fn from_request_parts(parts: &mut Parts, _state: &S) -> Result<Self> {
-        println!("->> {:<12} - Ctx", "EXTRACTOR");
+        info!("->> {:<12} - Ctx", "EXTRACTOR");
 
         parts
             .extensions
@@ -72,9 +69,6 @@ impl<S: Send + Sync> FromRequestParts<S> for Ctx {
     }
 }
 
-// endregion: --- Ctx Extractor
-
-/// Parse a token of format `user-[user-id].[expiration].[signature]`
 /// Returns (user_id, expiration, signature)
 fn parse_token(token: String) -> Result<(u64, String, String)> {
     let (_whole, user_id, exp, sign) = regex_captures!(

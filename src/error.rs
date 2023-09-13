@@ -1,6 +1,7 @@
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use serde::Serialize;
+use tracing::info;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -9,16 +10,14 @@ pub type Result<T> = core::result::Result<T, Error>;
 pub enum Error {
     LoginFail,
 
-    // -- Auth errors.
     AuthFailNoAuthTokenCookie,
     AuthFailTokenWrongFormat,
     AuthFailCtxNotInRequestExt,
 
-    // -- Model errors.
     TicketDeleteFailIdNotFound { id: u64 },
+    ConfigMissingEnv(&'static str),
 }
 
-// region:    --- Error Boilerplate
 impl core::fmt::Display for Error {
     fn fmt(&self, fmt: &mut core::fmt::Formatter) -> core::result::Result<(), core::fmt::Error> {
         write!(fmt, "{self:?}")
@@ -26,11 +25,10 @@ impl core::fmt::Display for Error {
 }
 
 impl std::error::Error for Error {}
-// endregion: --- Error Boilerplate
 
 impl IntoResponse for Error {
     fn into_response(self) -> Response {
-        println!("->> {:<12} - {self:?}", "INTO_RES");
+        info!("->> {:<12} - {self:?}", "INTO_RES");
 
         // Create a placeholder Axum reponse.
         let mut response = StatusCode::INTERNAL_SERVER_ERROR.into_response();
