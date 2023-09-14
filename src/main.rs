@@ -1,7 +1,6 @@
 pub use self::error::{Error, Result};
-pub use config::Config;
-
 use crate::model::models::ModelController;
+pub use config::Config;
 
 use axum::response::Response;
 use axum::routing::get_service;
@@ -18,6 +17,7 @@ use tracing::info;
 use tracing_subscriber::EnvFilter;
 use web::{mw_auth::mw_require_auth, route_login, route_tickets};
 
+mod _dev_utils;
 mod config;
 mod ctx;
 mod error;
@@ -31,6 +31,8 @@ async fn main() -> Result<()> {
         .with_target(false)
         .with_env_filter(EnvFilter::from_default_env())
         .init();
+
+    _dev_utils::init_dev().await;
 
     let mc = ModelController::new().await?;
 

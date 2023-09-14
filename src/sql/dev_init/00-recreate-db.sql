@@ -2,11 +2,11 @@
 
 SELECT pb_terminate_backend(pid) FROM pg_stat_activity WHERE
 
-username = 'app_user' OR datname = 'app_db';
+username = 'postgres' OR databasename = 'app_db';
 
 DROP DATABASE IF EXISTS app_db;
-DROP DATABASE IF EXISTS app_user;
+DROP DATABASE IF EXISTS postgres;
 
 -- DEV ONLY - Dev only password ( for local dev and unittest)
-CREATE USER app_user PASSWORD '1234'
+CREATE USER app_user PASSWORD 'postgres'
 CREATE DATABASE app_db owner app_user ENCODING =  'UTF-8';
