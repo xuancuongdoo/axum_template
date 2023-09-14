@@ -1,4 +1,3 @@
-// endregion: --- REST Handle
 use crate::ctx::Ctx;
 use crate::model::models::{ModelController, Ticket, TicketForCreate};
 use crate::Result;
@@ -19,6 +18,7 @@ async fn create_ticket(
     State(mc): State<ModelController>,
     ctx: Ctx,
     Json(ticket_fc): Json<TicketForCreate>,
+    
 ) -> Result<Json<Ticket>> {
     info!("->> {:<12} - create_ticket", "HANDLER");
 
