@@ -1,7 +1,7 @@
 pub use self::error::{Error, Result};
 pub use config::Config;
 
-use crate::models::ModelController;
+use crate::model::models::ModelController;
 
 use axum::response::Response;
 use axum::routing::get_service;
@@ -21,7 +21,7 @@ use web::{mw_auth::mw_require_auth, route_login, route_tickets};
 mod config;
 mod ctx;
 mod error;
-mod models;
+mod model;
 mod web;
 
 #[tokio::main]

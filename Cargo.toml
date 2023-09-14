@@ -16,7 +16,11 @@ axum = "0.6.16"
 tower-http = { version = "0.4", features = ["fs"] }
 tower-cookies = "0.9"
 
-# --Tracing
+# Sqlx
+sqlx = { version = "0.6", features = ["runtime-tokio-rustls"] }
+
+
+# Tracing
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 

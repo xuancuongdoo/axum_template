@@ -1,6 +1,6 @@
 // endregion: --- REST Handle
 use crate::ctx::Ctx;
-use crate::models::{ModelController, Ticket, TicketForCreate};
+use crate::model::models::{ModelController, Ticket, TicketForCreate};
 use crate::Result;
 use axum::extract::{Path, State};
 use axum::routing::{delete, post};
@@ -46,3 +46,6 @@ async fn delete_ticket(
 
     Ok(Json(ticket))
 }
+
+#[cfg(test)]
+mod test {}

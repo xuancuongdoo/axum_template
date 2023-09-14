@@ -1,5 +1,5 @@
 use crate::ctx::Ctx;
-use crate::models::ModelController;
+use crate::model::models::ModelController;
 use crate::web::AUTH_TOKEN;
 use crate::{Error, Result};
 use async_trait::async_trait;
