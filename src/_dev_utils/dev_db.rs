@@ -6,8 +6,8 @@ use tracing::{debug, info};
 
 type Db = Pool<Postgres>;
 
-const PG_DEV_POSTGRES_URL: &str = "postgres://postgres:postgres@localhost:5432/";
-const PG_DEV_APP_URL: &str = "postgres://postgres:postgres@localhost/app_db";
+const PG_DEV_POSTGRES_URL: &str = "postgres://postgres:postgres@localhost:5432/db";
+const PG_DEV_APP_URL: &str = "postgres://postgres:postgres@localhost/db";
 
 //sql files
 const SQL_RECREATE_DB: &str = "sql/dev_initial/00-recreate-db.sql";
@@ -18,13 +18,6 @@ pub async fn init_dev_db() -> Result<(), Box<dyn std::error::Error>> {
     {
         pexec(&new_db_pool(PG_DEV_POSTGRES_URL).await?, SQL_RECREATE_DB).await?;
     }
-    let p = {
-        let this = fs::read_dir(SQL_DIR);
-        match this {
-            Ok(t) => debug!("{:?}", t),
-            Err(e) => info!("{:?}", e),
-        }
-    };
 
     let mut paths: Vec<PathBuf> = fs::read_dir(SQL_DIR)?
         .filter_map(|entry| entry.ok().map(|e| e.path()))
