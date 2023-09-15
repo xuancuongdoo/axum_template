@@ -5,9 +5,7 @@ use serde::Serialize;
 pub enum Error {}
 
 impl core::fmt::Display for Error {
-    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::result::Result<(), core::fmt::Error> {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result<(), core::fmt::Error> {
         write!(f, "{self:?}")
     }
 }
-
-impl std::error::Error for Error {}
