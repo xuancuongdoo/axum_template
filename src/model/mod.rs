@@ -3,6 +3,8 @@ pub mod models;
 mod store;
 pub use crate::error::{Error, Result};
 
+use self::store::{new_db_pool, Db};
+
 // Model Layer
 //
 // Design
@@ -25,10 +27,13 @@ pub use crate::error::{Error, Result};
 //
 
 #[derive(Clone)]
-pub struct ModelManager {}
+pub struct ModelManager {
+    db: Db,
+}
 
 impl ModelManager {
     pub async fn new() -> Result<Self> {
-        Ok(ModelManager {})
+        let db = new_db_pool().await?;
+        Ok(ModelManager { db })
     }
 }
