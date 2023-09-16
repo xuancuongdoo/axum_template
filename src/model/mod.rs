@@ -1,9 +1,9 @@
 mod error;
 pub mod models;
-mod store;
-pub use crate::error::{Error, Result};
+pub mod store;
+pub use self::error::{Error, Result};
 
-use self::store::{new_db_pool, Db};
+use crate::model::store::{new_db_pool, Db};
 
 // Model Layer
 //

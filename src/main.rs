@@ -1,6 +1,6 @@
 pub use self::error::{Error, Result};
 use crate::model::models::ModelController;
-pub use config::Config;
+pub use config::config;
 
 use axum::response::Response;
 use axum::routing::get_service;
@@ -17,7 +17,7 @@ use tracing::info;
 use tracing_subscriber::EnvFilter;
 use web::{mw_auth::mw_require_auth, route_login, route_tickets};
 
-mod _dev_utils;
+pub mod _dev_utils;
 mod config;
 mod ctx;
 mod error;

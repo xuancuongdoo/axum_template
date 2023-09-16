@@ -1,10 +1,12 @@
 use crate::{Error, Result};
-use std::{env, sync::OnceLock};
+use std::env;
+use std::str::FromStr;
+use std::sync::OnceLock;
 
 pub fn config() -> &'static Config {
     static INSTANCE: OnceLock<Config> = OnceLock::new();
 
-    INSTANCE.get_or_init(|| {
+    INSTANCE.get_or_init(|| -> Config {
         Config::load_from_env().unwrap_or_else(|ex| {
             panic!("Failed to load config: {}", ex);
         })

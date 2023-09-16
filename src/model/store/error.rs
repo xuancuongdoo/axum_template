@@ -11,3 +11,5 @@ impl core::fmt::Display for Error {
         write!(f, "{self:?}")
     }
 }
+
+impl std::error::Error for Error {}
