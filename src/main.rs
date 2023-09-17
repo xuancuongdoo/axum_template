@@ -1,15 +1,12 @@
 pub use self::error::{Error, Result};
 use crate::model::models::ModelController;
+use crate::model::ModelManager;
 pub use config::config;
 
 use axum::response::Response;
 use axum::routing::get_service;
 use axum::{middleware, Router};
-
-use serde::Deserialize;
-
 use std::net::SocketAddr;
-
 use tower_cookies::CookieManagerLayer;
 use tower_http::services::ServeDir;
 
@@ -18,6 +15,7 @@ use tracing_subscriber::EnvFilter;
 use web::{mw_auth::mw_require_auth, route_login, route_tickets};
 
 pub mod _dev_utils;
+
 mod config;
 mod ctx;
 mod error;
@@ -33,6 +31,8 @@ async fn main() -> Result<()> {
         .init();
 
     _dev_utils::init_dev().await;
+
+    let mm = ModelManager::new().await;
 
     let mc = ModelController::new().await?;
 
@@ -63,11 +63,6 @@ async fn main() -> Result<()> {
 async fn main_response_mapper(res: Response) -> Response {
     info!("-> {:<12} -  main_response_mapper - {res:?}", "HANDLER");
     res
-}
-
-#[derive(Debug, Deserialize)]
-struct HelloParams {
-    name: Option<String>,
 }
 
 fn routes_static() -> Router {

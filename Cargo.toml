@@ -33,6 +33,8 @@ strum_macros = "0.25.2"
 uuid = {version = "1", features = ["v4","fast-rng",]}
 
 
+
 [dev-dependencies]
 anyhow = "1.0.75"
+serial_test = "2.0.0"
 httpc-test = "0.1.5"

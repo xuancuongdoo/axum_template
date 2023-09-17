@@ -2,6 +2,7 @@ mod error;
 pub mod models;
 pub mod store;
 pub use self::error::{Error, Result};
+pub mod task;
 
 use crate::model::store::{new_db_pool, Db};
 
@@ -32,8 +33,16 @@ pub struct ModelManager {
 }
 
 impl ModelManager {
+    /// Contructor
     pub async fn new() -> Result<Self> {
         let db = new_db_pool().await?;
         Ok(ModelManager { db })
+    }
+
+    /// Return the sqlx db pool reference
+    /// only for model layer
+    ///
+    pub(in crate::model) fn db(&self) -> &Db {
+        &self.db
     }
 }
