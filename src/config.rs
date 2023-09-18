@@ -1,6 +1,5 @@
 use crate::{Error, Result};
 use std::env;
-use std::str::FromStr;
 use std::sync::OnceLock;
 
 pub fn config() -> &'static Config {
