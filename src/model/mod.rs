@@ -2,6 +2,7 @@ mod base;
 mod error;
 pub mod models;
 mod store;
+mod user;
 
 pub use self::error::{Error, Result};
 pub mod task;
