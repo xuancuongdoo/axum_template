@@ -16,6 +16,7 @@ pub enum Error {
 
     TicketDeleteFailIdNotFound { id: u64 },
     ConfigMissingEnv(&'static str),
+    ConfigInvalidEnv(&'static str),
 }
 
 impl core::fmt::Display for Error {
